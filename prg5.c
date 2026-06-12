@@ -1,76 +1,55 @@
-#include <stdio.h>
+#include<stdio.h>
 
-int a[10][10], n, indeg[10];
+int adj[10][10], n, indegree[10];
 
-void find_indegre()
-{
-    int i, j, sum;
-
-    for(j = 0; j < n; j++)
-    {
-        sum = 0;
-
-        for(i = 0; i < n; i++)
-            sum += a[i][j];
-
-        indeg[j] = sum;
+void findIndegree() {
+    for (int j = 0; j < n; j++) {
+        int sum = 0;
+        for (int i = 0; i < n; i++)
+            sum += adj[i][j];      // count incoming edges to j
+        indegree[j] = sum;
     }
 }
 
-void topology()
-{
-    int i, u, v;
-    int s[10], t[10];
-    int top = -1, k = 0;
+void topologicalSort() {
+    int result[10], stack[10], top = -1, count = 0;
 
-    find_indegre();
+    findIndegree();
 
-    // push all nodes with indegree 0
-    for(i = 0; i < n; i++)
-    {
-        if(indeg[i] == 0)
-            s[++top] = i;
+    // Push all jobs with no prerequisites
+    for (int i = 0; i < n; i++) {
+        if (indegree[i] == 0)
+            stack[++top] = i;
     }
 
-    while(top != -1)
-    {
-        u = s[top--];
-        t[k++] = u;
+    while (top != -1) {
+        int u = stack[top--];   // pick a job with 0 indegree
+        result[count++] = u;
 
-        for(v = 0; v < n; v++)
-        {
-            if(a[u][v] == 1)
-            {
-                indeg[v]--;
-
-                if(indeg[v] == 0)
-                    s[++top] = v;
+        // Reduce indegree of jobs that depended on u
+        for (int v = 0; v < n; v++) {
+            if (adj[u][v] == 1) {
+                indegree[v]--;
+                if (indegree[v] == 0)
+                    stack[++top] = v;
             }
         }
     }
 
     printf("The topological Sequence is:\n");
-
-    for(i = 0; i < n; i++)
-        printf("%d ", t[i]);
+    for (int i = 0; i < n; i++)
+        printf("%d ", result[i]);
 }
 
-int main()
-{
-    int i, j;
-
+int main() {
     printf("Enter number of jobs:");
     scanf("%d", &n);
 
     printf("\nEnter the adjacency matrix:\n");
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            scanf("%d", &adj[i][j]);
 
-    for(i = 0; i < n; i++)
-    {
-        for(j = 0; j < n; j++)
-            scanf("%d", &a[i][j]);
-    }
-
-    topology();
-
+    topologicalSort();
     return 0;
 }
