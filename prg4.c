@@ -7,19 +7,19 @@ void dij(int n, int v, int cost[10][10], int dist[10])
     int flag[10] = {0};
 
     // initialize distances from source
-    for(i = 0; i < n; i++)
+    for(i = 1; i <= n; i++)
     {
         dist[i] = cost[v][i];
     }
 
     flag[v] = 1;
-    count = 1;
+    count = 2;
 
-    while(count < n)
+    while(count <= n)
     {
         min = INF;
         // pick minimum distance unvisited node
-        for(w = 0; w < n; w++)
+        for(w = 1; w <= n; w++)
         {
             if(dist[w] < min && !flag[w])
             {
@@ -32,7 +32,7 @@ void dij(int n, int v, int cost[10][10], int dist[10])
         count++;
 
         // relax edges
-        for(w = 0; w < n; w++)
+        for(w = 1; w <= n; w++)
         {
             if(!flag[w] && dist[u] + cost[u][w] < dist[w])
             {
@@ -51,9 +51,9 @@ int main()
     scanf("%d", &n);
 
     printf("\n Enter the cost matrix:\n");
-    for(i = 0; i < n; i++)
+    for(i = 1; i <= n; i++)
     {
-        for(j = 0; j < n; j++)
+        for(j = 1; j <= n; j++)
         {
             scanf("%d", &cost[i][j]);
             if(cost[i][j] == 0)
@@ -67,7 +67,7 @@ int main()
     dij(n, v, cost, dist);
 
     printf("\n Shortest path:\n");
-    for(i = 0; i < n; i++)
+    for(i = 1; i <= n; i++)
     {
         if(i != v)
         {
